@@ -6,10 +6,25 @@ use M3\Database\Fields;
 if (!defined('M3_BASE_INCLUDED')) {
     require 'm3/bin/base.php';
 }
-bin::help("Creates a empty database table definition.", 
-    "new tabledef [for] app_name", 
+bin::help("Creates a database table definition.", 
+    "[for] app_name tabledef_name [field_name:field_value [...]]", 
     [
-        'app_name' => 'Target app'
+        'for' => [
+            'optional' => true,
+            'description' => 'Syntactic sugar word.'
+        ],
+        'app_name' => "Name of the app where the new table definition will be\ncreated.",
+        'tabledef_name' => "Name of the new table definition.",
+
+        'field_name' => [
+            'optional' => true,
+            'description' => 'Adds a new field to the table definition.',
+        ],
+        'field_type' => [
+            'optional' => true,
+            'description' => "Type of the field. Only specify the class name, not the\nFQCN.",
+        ],
+
     ]
 );
 
@@ -43,6 +58,9 @@ foreach ($argv as $arg) {
 
     list($name, $type) = explode(':', $arg, 2);
 
+    if (!isset($lcase[strtolower($type)])) {
+        Console::fail("'$type' is an invalid data base field.");
+    }
     $type = $lcase[strtolower($type)];
     
     if (!defined("M3\\Database\\Fields::$type")) {

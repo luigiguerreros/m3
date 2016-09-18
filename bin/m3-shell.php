@@ -2,6 +2,8 @@
 use M3\Cli;
 use M3\Console;
 
+bin::help('Starts a M3 evaluative PHP shell.', '', []);
+
 class _ {
     static $levels = [ 
         '"' => [
@@ -378,6 +380,4 @@ while ("hey there :)") {
     
     // añadimos a la historia
      _::save_line_and_reset( true );
-
-
 }

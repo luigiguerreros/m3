@@ -2,9 +2,24 @@
 use M3\Cli;
 use M3\Console;
 
+bin::help('Creates a new app for this project.', 
+    'app_name [--without-view]',
+    [
+        'app_name' => "Name of the new app. Avoid use PHP keywords, or 'm3'.",
+        '--without-view' => [
+            'optional' => true,
+            'description' => "Don't create a default view.",
+        ],
+    ]
+);
 // Si ya existe la app, fallamos
-if ( bin::$module->app_exists ) {
+if (isset(bin::$module->app_exists) && bin::$module->app_exists) {
     Console::fail ("Application '{:app " . bin::$module->app . "}' already exist.");
+}
+var_dump(bin::$module);
+// Necesitamos un nombre de módulo
+if (!bin::$module->app) {
+    console::fail ('New app name is missing. Try --help.');
 }
 
 // Hay algunos nombres prohibidos
@@ -18,38 +33,33 @@ if ( !$controller ) {
     $controller = 'default';
 }
 
-// Creamos la nueva estructura
-if ( isset ( bin::$args['bare'] ))  {
-    Console::write ( "Creating bare new app {:app " . bin::$module->app . "}...");
-}
-else {
-    Console::write ( "Creating new app {:app " . bin::$module->app . "}...");
-    Cli\makeTree(bin::$project_path, [
-        "apps/" . bin::$module->app => [
-            'controllers', 
-            'models', 
-            'forms',
-            'services',
-            'db',
-            'assets' => [
-                'css',
-                'js',
-                'imgs'
-            ],
-            'views' => [
-                'layouts'
-            ],
-        ]
-    ]);
+Console::write ( "Creating new app {:app " . bin::$module->app . "}...");
+Cli\makeTree(bin::$project_path, [
+    "apps/" . bin::$module->app => [
+        'controllers', 
+        'models', 
+        'forms',
+        'services',
+        'db',
+        'assets' => [
+            'css',
+            'js',
+            'imgs'
+        ],
+        'views' => [
+            'layouts'
+        ],
+    ]
+]);
 
-}
 
 // oh, php...
 $APPLICATION = bin::$module->app;
 
+Cli\createController (bin::$project_path, bin::$module->app, $controller);
+
 // Creamos una vista, a menos que no querramos
-$content = '';
-if (!isset(bin::$args['noview'])) {
+if (!isset(bin::$args['without-view'])) {
 
     $content = <<<EOF
 <!-- Delete this and the lines below, and write your own view. -->
@@ -60,7 +70,5 @@ changing this text, or the file <strong>apps/$APPLICATION/controllers/default.ph
 for changing the controller behavior.</p>
 
 EOF;
+    Cli\createView (bin::$project_path, $APPLICATION, $controller, $content);
 }
-
-Cli\createController (bin::$project_path, bin::$module->app, $controller);
-Cli\createView (bin::$project_path, $APPLICATION, $controller, $content);

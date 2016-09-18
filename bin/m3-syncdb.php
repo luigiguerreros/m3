@@ -6,9 +6,13 @@ use M3\Database\Database;
 if (!defined('M3_BASE_INCLUDED')) {
     require 'm3/bin/base.php';
 }
-bin::help("Syncs the database definition.", 
-    "[app] <options>",
+bin::help("Synchronize the database definition.", 
+    "[app] [--drop]",
     [
+    'app' => [
+        'optional' => true,
+        'description' => 'Only process the tabledefs from this app'
+    ],
     '--drop' => [
         'optional' => true,
         'description' => 'Allows destructive commands.'

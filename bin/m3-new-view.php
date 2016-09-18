@@ -1,6 +1,18 @@
 <?php
 use M3\Cli;
 
+bin::help("Creates an empty view file.",
+    "[for] app_name view_name", 
+    [
+        'for' => [
+            'optional' => true,
+            'description' => 'Syntactic sugar word.'
+        ],    
+        'app_name' => 'Name of the app where the new view will be created',
+        'model_name' => 'New view name.'
+    ]
+);
+
 // Debe existir la app
 
 if ( ! bin::$module->app_exists ) {

@@ -5,6 +5,24 @@ if (!defined ( "M3_BASE_INCLUDED")) {
     require 'm3/bin/base.php';    
 }
 
+bin::help('Creates a new form definition file.', 
+    '[for] app_name form_name [control_name:control_type [...]]', [
+        'for' => [
+                    'optional' => true,
+                    'description' => 'Syntactic sugar word.'
+                ],
+        'app_name' => "Name of the app where the new form will be created.",
+        'form_name' => "New form name.",
+        'control_name' => [
+            'optional' => true,
+            'description' => 'Adds a new control to the form definition.',
+        ],
+        'control_type' => [
+            'optional' => true,
+            'description' => "Type of control. Only specify the class name, not the\nFQCN.",
+        ],
+    ]);
+
 // Debe existir el proyecto
 if (!bin::$project_exists) {
     Console::fail ( "M3 project not found." );

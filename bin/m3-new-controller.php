@@ -2,11 +2,26 @@
 use M3\Cli;
 use M3\Console;
 
+bin::help('Creates a new controller for an existent app', 
+    '[for] app_name controller_name [--without-view]',
+    [
+        'for' => [
+            'optional' => true,
+            'description' => 'Syntactic sugar word.'
+        ],
+        'app_name' => "Name of the app where the controller will be created.",
+        'controller_name' => 'New controller name.',
+        '--without-view' => [
+            'optional' => true,
+            'description' => "Don't create a default view with the same name.",
+        ],
+    ]
+);
 // Creamos un controlador
 Cli\createController (bin::$project_path, bin::$module->app, bin::$module->element);
 
 // Creamos una vista, a menos que no querramos
-if ( !isset ( bin::$args['noview'] ) ) {
+if ( !isset ( bin::$args['without-view'] ) ) {
     $APPLICATION = bin::$module->app;
     $ELEMENT_NAME = bin::$module->element;
 

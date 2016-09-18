@@ -5,20 +5,20 @@ use M3\Console;
 if (!defined('M3_BASE_INCLUDED')) {
     require 'm3/bin/base.php';
 }
-bin::help("Creates the skeleton for a new M3 project.", 
+bin::help("Creates the skeleton directory for a new M3 project.", 
     "[directory] <options>",
 [
     'directory' => [
         'optional' => true,
-        'description' => 'New project path. Default is the current directory.'
+        'description' => 'New project path. Default is the current\ndirectory.'
     ],
     '--webroot=<dir>' => [
         'optional' => true,
-        'description' => 'Path to the public web root directory. Default is the project directory.'
+        'description' => 'Path to the public web root directory.\nDefault is the project directory.'
     ],
     '--bare' => [
         'optional' => true,
-        'description' => 'Creates the bare minimun directory structure. Hey Fabian! :)'
+        'description' => 'Creates the bare minimun directory\nstructure. Hey Fabian! :)'
     ],
 ]);
 

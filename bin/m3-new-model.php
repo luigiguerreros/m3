@@ -4,11 +4,15 @@ use M3\Cli;
 if (!defined ( "M3_BASE_INCLUDED")) {
     require 'm3/bin/base.php';    
 }
-bin::help("Creates a model definitio.", 
-    "new model [for] app_name model_name", 
+bin::help("Creates a model definition.", 
+    "[for] app_name model_name", 
     [
-        'app_name' => 'Target app',
-        'model_name' => 'Model name. It should match a tabledef.'
+        'for' => [
+            'optional' => true,
+            'description' => 'Syntactic sugar word.'
+        ],    
+        'app_name' => 'Name of the app where the new model will be created',
+        'model_name' => 'New model name. It should match a tabledef.'
     ]
 );
 

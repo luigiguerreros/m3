@@ -1,7 +1,7 @@
 <?php
-use m3\cli;
+use M3\Console;
 
-const M3_VERSION = 1.0;
+const M3_VERSION = "0.0.1";
 const M3_BASE_INCLUDED = true;
 
 // Realizamos chequeos del sistema.
@@ -50,7 +50,7 @@ class bin {
     static $project_name = '';
 
     // Containe used for some m3 scripts
-    static $module = '';
+    static $module = null;
 
     /**
      * Determina si hay un proyecto M3 en la carpeta dada
@@ -140,7 +140,7 @@ class bin {
         }
 
         // Si existe una ruta del proyecto, nos fijamos si hay un proyecto ahi
-        if ( self::$project_path ) {
+        if (self::$project_path) {
             self::$project_exists = self::is_m3project ( self::$project_path );
         }
 
@@ -180,11 +180,90 @@ class bin {
     }
 
     /**
-     * Shows this help if --help or --version parameter is found.
+     * Draws parameters and its description in a fancy way.
      */
-    static function help($description, $cmdline, array $parameters) 
+    static public function writeFancyDefinitions(array $definitions)
     {
+        // Primero, ubicamos el padding adecuado
+        $max_length = 0;
+        foreach (array_keys($definitions) as $def) {
+            $lenght = mb_strlen($def);
+            if ($lenght > $max_length) {
+                $max_length = $lenght;
+            }
+        }
 
+        $base_padding = 5;
+        $descr_padding =  $max_length + 5;
+
+        foreach ($definitions as $def => $descr) {
+
+            $options = [];
+            if (is_array($descr)) {
+                $options = $descr;
+                $descr = $descr['description'];
+
+                if (isset($options['optional'])) {
+                    $descr = $descr . ' (optional)';
+                }
+            }
+
+            $var = Console::color('white', $def);
+
+            $values = explode("\n", $descr);
+
+            $line = str_repeat(' ', $base_padding) . $var;
+            $line .= str_repeat(' ', $descr_padding - mb_strlen($def));
+
+            $line .= array_shift($values) . PHP_EOL;
+
+            $newline_padding = str_repeat(' ', $descr_padding + $base_padding);
+
+            while ($data = array_shift($values)) {
+                $line .= $newline_padding . $data . PHP_EOL;
+            }
+            echo $line;
+        }
+
+    }    
+
+
+    /**
+     * Shows a pretty header
+     */
+    static function writeHeader()
+    {
+        $M3_VERSION = M3_VERSION;
+        Console::write(<<<EOF
+{white M3 Framework} Administration utility script.
+Version $M3_VERSION
+
+EOF
+);
+    }
+
+    /**
+     * Shows this help if --help parameter is found.
+     */
+    static function help($description, $cmdline, array $parameters, 
+        $force = false) 
+    {
+        if (isset(bin::$args['help']) || $force) {
+            
+            $name = self::$script_name;
+            if (isset(self::$module->name)) {
+                $name .= ' ' . self::$module->name;
+            }
+
+            self::writeHeader();
+            console::write('{green m3 ' . $name . "}: $description");
+            console::write ("\nSyntax: m3 $name $cmdline\n");
+
+            self::writeFancyDefinitions($parameters);
+            echo PHP_EOL;
+            
+            exit;
+        }
     }
 }
 

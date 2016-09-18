@@ -3,9 +3,25 @@ use M3\Cli;
 use M3\Path;
 use M3\Console;
 
-// La sintaxis es
-//
-// m3.php new [base] element [for] application name [extra parameters]
+if (count($argv) == 0) {
+    // Solo ejecutamos este help si viene con un único parámetro
+    bin::help('Creates new elements for an existing M3 project.', 
+        '[base] element [for] app_name element_name [extra_parameters]',
+        [
+            'base' => [
+                'optional' => true,
+                'description' => 'Creates a element inside base/ directory.',
+            ],
+            'element' => 'Name of the new element to be created. Valid options are:' .
+                "\n- app\n- model\n- view\n- controller\n- form\n- tabledef",
+            'for' => [
+                'optional' => true,
+                'description' => 'Syntactic sugar word.'
+            ],
+            'app_name' => 'Name of an existent app.',
+            'extra_parameters' => 'Parameters for the new element.',
+        ], true);
+}
 
 // Debe existir el proyecto
 if (!bin::$project_exists) {
@@ -33,7 +49,7 @@ if ( $module == 'base' ) {
     }
 
     // Si no hay app, no fallamos.
-    if ( $app ) {
+    if ($app) {
         bin::$module->app = $app;
 
         // Existe?
@@ -51,13 +67,11 @@ $module_file = M3\BASE_PATH . "/bin/m3-new-" . bin::$module->name . ".php";
 if (file_exists($module_file)) {
 
     // El módulo 'app' es distinto. No mostramos mensajes 
-    if ( bin::$module->name != 'app' ) {
-
+    if (bin::$module->name != 'app' && !isset(bin::$args['help'])) {
         // Si no existe la app, fallamos
         if (!isset(bin::$module->app)) { 
             Console::fail ( 'You must specify an application name.');
         }
-
 
         // Necesitamos el nombre del nuevo elemento siepre
         if (!bin::$module->element) {
@@ -79,9 +93,10 @@ if (file_exists($module_file)) {
                 bin::$module->element . "}..." );
         }
     }
-if (!ini_get('display_errors')) {
-    ini_set('display_errors', '1');
-}
+
+    if (!ini_get('display_errors')) {
+        ini_set('display_errors', '1');
+    }
     // Y ejecutamos el módulo
     require $module_file;
 }

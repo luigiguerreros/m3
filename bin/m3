@@ -1,5 +1,6 @@
 #!/usr/bin/env php
 <?php
+use M3\Console;
 if (!defined ("M3_BASE_INCLUDED")) {
     
     // Pre-sanity check
@@ -14,9 +15,26 @@ if (!defined ("M3_BASE_INCLUDED")) {
     }
 
     require $base_file;
+
+
 }
 
 if (bin::$script_name) {
     $script = bin::$script_name;
     require M3\BASE_PATH . "/bin/m3-$script.php";
+} else {
+    $modules = [
+        'init' => 'Create a new M3 project.',
+        'new' => 'Creates new elements for an existing M3 project, like apps.',
+        'server' => 'Run a stand-alone development server.',
+        'shell' => 'Starts a M3 evaluative PHP shell.',
+        'syncdb' => 'Syncronize table definitions from apps with the database.'
+    ];
+
+    bin::writeHeader();
+    console::write('Available modules:' . PHP_EOL);
+    bin::writeFancyDefinitions($modules);
+    echo PHP_EOL . PHP_EOL;
+    console::write('Use {white m3 [module] --help} for more module information.');
+    echo PHP_EOL;
 }
