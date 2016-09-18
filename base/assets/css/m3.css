@@ -1,0 +1,38 @@
+/* Message bar */
+div.m3_message_container {
+    font-size: 13pt;
+    font-family: sans-serif;
+
+    div.m3_message {
+        margin: 3px 0px;
+        padding: 10px;
+        border: 1px solid;
+
+        &.message {
+            background: #eee;
+            border-color: #ddd;
+        }
+
+        &.warning {
+            background: #eea;
+            border-color: #dd8;
+        }
+
+        &.error {
+            color: white;
+            background: #f88;
+            border-color: #d88;
+        }
+
+    }
+
+}
+
+div.m3_form_messageblock div {
+    color: red;
+}
+
+div.m3_form_info {
+    font-size: 80%;
+    color: #666;
+}

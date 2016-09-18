@@ -1,0 +1,23 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0px;
+}
+#header {
+    background: #0071c0 url("../imgs/m3_logo.png")  no-repeat center bottom;
+    height: 100px;
+
+}
+.container {
+    padding: 10px 10px;
+    width: 900px;
+    margin: 0px auto;
+}
+h1 {
+    font-weight: normal;
+    font-size: 36px;
+}
+pre {
+    border: 1px solid #EEE;
+    padding: 5px;
+    border-radius: 5px;
+}

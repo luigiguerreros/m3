@@ -1,0 +1,22 @@
+#!/usr/bin/env php
+<?php
+if (!defined ("M3_BASE_INCLUDED")) {
+    
+    // Pre-sanity check
+    $base_path = 'm3/';
+    if (getenv('M3_BASE_PATH')) {
+        $base_path = getenv('M3_BASE_PATH') . '/';
+    }
+
+    $base_file = $base_path . 'bin/base.php';
+    if (stream_resolve_include_path($base_file) === false) {
+        exit("FATAL: Cannot find the M3 installation path. Check the 'include_path' setting in php.ini or the M3_BASE_PATH environment variable.\n");
+    }
+
+    require $base_file;
+}
+
+if (bin::$script_name) {
+    $script = bin::$script_name;
+    require M3\BASE_PATH . "/bin/m3-$script.php";
+}
